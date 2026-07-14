@@ -1,36 +1,26 @@
-# Scot Carl
+# 👋 Daily-lesson
 
-Robotics Engineer at Texas Instruments, based in Dallas, TX. I work on autonomous
-systems — Boston Dynamics Spot and BVLOS drone operations — and the IoT
-integration around them across a 21-site manufacturing network. Background in
-civil engineering and project management; FAA Part 107/108.
+Robotics engineer by trade — I work on autonomous systems (Boston Dynamics Spot,
+BVLOS drones) and the IoT around them across a large manufacturing network.
 
-Outside of work I build software to sharpen my engineering — mostly Next.js /
-Supabase web apps and PWAs. I still consider myself a growing developer, so these
-are works in progress rather than finished products.
+The projects below are mine in the sense that I design and direct them, but I
+don't hand-write the code — I use Claude to build them. I bring the domain
+knowledge and product direction; the AI does the implementation. They're
+experiments and works in progress, not polished products.
 
-### What I'm building
+### Projects
 
-- **PRISM** — a multi-tenant robotics fleet-operations dashboard (Express +
-  Postgres + Redis backend, single-file HTML frontend). Close to the fleet-ops
-  work I do day to day.
-- **ResumAI** — AI-assisted resume tailoring and job search (Next.js, Supabase,
-  Stripe).
+- **PRISM** — a robotics fleet-operations dashboard, close to the fleet-ops work I
+  do day to day.
+- **ResumAI** — AI-assisted resume tailoring and job search.
 - **Off_Races** — a phone-first horse-race handicapping PWA with a transparent,
   offline scoring engine.
 - **SocialOS** — a personal social-media manager PWA.
 
-### Tools I reach for
+### What these are built with
 
-`Python` · `JavaScript` / `TypeScript` · `Next.js` · `React` · `Supabase` /
-`Postgres` · REST APIs
-Robotics & IoT: Boston Dynamics Spot SDK, drone systems, Spotfire, Genetec, SCADA
-
-### Currently learning
-
-Deeper backend and systems work, and applying LLMs to real workflows.
-
-📫 Reach me at scoty.carl@gmail.com
+Next.js · React · TypeScript · Supabase / Postgres · Python — assembled mostly
+with AI coding tools.
 
 <!---
 Daily-lesson/Daily-lesson is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
