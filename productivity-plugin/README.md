@@ -38,6 +38,7 @@ Dallas shipping several apps at once — instead of generic productivity boilerp
 | `/invoices [...]` | Invoice status via PayPal; can draft/create with confirmation (never sends silently). |
 | `/promote <what>` | Platform-tailored launch posts (LinkedIn / X / Reddit / IG / TikTok) grounded in what actually shipped. |
 | `/grow [focus]` | Weekly highest-leverage growth move — GitHub profile, portfolio, audience, or hireability. |
+| `/newsletter [topic]` | Researches a tech topic, **verifies every source and stat via WebFetch**, and builds a polished, responsive HTML email newsletter. Defaults to a semiconductor-fab robotics/automation issue. |
 
 ## Agents
 
