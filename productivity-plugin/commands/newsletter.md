@@ -1,7 +1,7 @@
 ---
-description: Research and build a polished, source-verified HTML newsletter on a tech topic
+description: Research, build (Fab Signal console template) and promote a source-verified HTML newsletter
 argument-hint: "[topic — default: latest in robotics, autonomy & industrial IoT]"
-allowed-tools: WebSearch, WebFetch, mcp__Mem0__search_memories, mcp__Mem0__add_memory, Write, Read
+allowed-tools: WebSearch, WebFetch, mcp__Mem0__search_memories, mcp__Mem0__add_memory, Write, Read, Task
 ---
 
 Produce a **fully-coded, visually polished HTML email newsletter** on: **$ARGUMENTS**
@@ -64,40 +64,60 @@ and adjacent frontier tech. Lead with what's genuinely new, not evergreen backgr
 - Voice: expert semiconductor-industry analyst — precise, technical, confident, no
   fluff. Each item should teach the reader something concrete.
 
-## HTML / CSS spec
+## HTML build — the "Fab Signal" console template
 
-- Output as **one self-contained raw HTML block** in an ```html fence. Prefer a
-  modern responsive `<div>` container; avoid `<table>` layout unless truly needed.
-- `<style>` block in `<head>`: modern clean font stack (`system-ui, Inter, Arial`),
-  smooth hover states, and a `max-width:600px` media query that collapses multi-column
-  grids and tightens padding. **Note the tradeoff in your summary:** head `<style>` +
-  media queries render beautifully in a browser/webmail preview but some desktop mail
-  clients strip them — offer to also produce an inline-styled version if the user
-  intends to actually send it.
-- **Palette:** sophisticated corporate — deep slate/navy, teal accent, clean
-  white/gray surfaces, high-contrast charcoal text. Pick light or dark mode and
-  commit to it.
-- **Layout, in order:**
-  - Header band: masthead title + the required subtitle.
-  - Metadata bar: Issue #, Date, Classification.
-  - "Executive Summary" lead paragraph.
-  - Section dividers with a left-accent colored bar or clean border.
-  - **Intel Cards** — each item in its own container: category badge
-    (e.g. `AI & EDGE`, `FAB CAPEX`), bold title, body copy, and a visible verified
-    CTA link.
-  - **Key Indicators** — a 3-column metrics grid (percent / $ / stat), each figure
-    sourced per step 3.
-  - Footer: copyright, an internal-distribution disclaimer, and one real external
-    reference link (e.g. Stanford Emerging Technology Review).
+Do **not** hand-roll a new layout. Build every issue from the canonical skeleton at
+`${CLAUDE_PLUGIN_ROOT}/templates/newsletter-console.html` — `Read` it, then swap only
+the content slots (masthead/subtitle, meta bar, `<article class="intel">` cards, the
+filter chips + counts, telemetry gauges, footer). Keep the design system intact:
+
+- **Identity:** a cleanroom control-room / signals-terminal console — not a generic
+  email. Deep cool-slate ground, a single cyan **signal** accent (`--signal`), a
+  wafer-lattice dot grid, monospace carrying the instrumentation (channel IDs, meta
+  bar, gauge digits). Amber is a *semantic* CAPEX/alert chip only, never the accent.
+- **Structure the template already ships:** reading-progress signal line · animated
+  signal-trace header canvas · sticky **pillar filter** (chips with live counts) ·
+  numbered section headers · **Intel Cards** as "channels" (`CH·NN`, category badge,
+  `data-cat`) · **telemetry gauges** that count up on scroll · console status-bar footer.
+- **Wiring rules when you swap content:**
+  - Give every card a real `data-cat` (`fab` | `edge` | `market` | `field` | `iiot`)
+    and update the filter chips + their counts to match what actually shipped. Drop a
+    chip if its count is 0 — don't fake a populated pillar.
+  - Every gauge figure carries `data-target` and must trace to a verified source.
+  - Every CTA/`.src` link is a real, verified URL (per the workflow above).
+- **Interactivity is first-class:** it's built to be *operated*. Keep it self-contained
+  (inline CSS/JS, no external fonts/CDNs), theme-toggle + `prefers-color-scheme` at the
+  token level, and `prefers-reduced-motion` respected. This is a browser/preview-grade
+  page — **if the user wants to actually email it, offer the inline-styled fallback**
+  (head `<style>`, media queries, and the canvas won't survive many mail clients).
 
 ## Deliverables (in this order)
 
-1. A short bulleted summary of the technical highlights **and** the design choices
-   made (include the mail-client tradeoff note).
-2. The raw HTML code block.
-3. One real, verified supplementary **video** link (e.g. a YouTube automated-cleanroom
-   / fab tour from TI, GF, or ASML) — `WebFetch`-checked like every other link.
+1. A short bulleted summary of the technical highlights **and** the design/UX choices.
+2. The finished HTML (save to a file; offer to publish it as an **Artifact** so the
+   user can view/operate it live).
+3. One real, verified supplementary **video** link — `WebFetch`-checked like every link.
 
-Save the final HTML to a file if I ask, and offer to hand the copy to `/promote` for
-a launch post. Log the topic + issue # to Mem0 ("newsletter") so we don't repeat an
-angle next issue.
+## Promote — publish to the advised platform
+
+After the issue is built, run the promotion hand-off automatically (this is the whole
+point of a *weekly* — it should reach an audience):
+
+1. **Pick the advised platform.** Match platform to the content, don't default:
+   - This beat (semiconductor / robotics / industrial IoT B2B intelligence, authored by
+     a robotics engineer building in public) → **LinkedIn is the advised platform.**
+     X/Twitter is the secondary. Reddit only for a genuinely discussion-worthy single item.
+   - State which platform you chose and one line of why.
+2. **Draft the public post** via `/promote` (hand it the issue's headline items + the
+   Artifact/newsletter link) so the copy is grounded in what actually shipped — no
+   invented metrics, in the builder-in-public voice.
+3. **Publish it** through **SocialOS** (the user's own social manager — it targets
+   LinkedIn/X/Reddit/etc.). No third-party LinkedIn/X posting connector is currently
+   connected to this session, so SocialOS is the publish path; if none is wired, output
+   the ready-to-post copy + link for one-tap posting.
+4. **Gate on an explicit yes.** Posting publicly is outward-facing and hard to undo —
+   show the final post text and target platform and **wait for confirmation in the same
+   turn before anything is published.** Schedule vs. post-now is the user's call.
+
+Log the topic, issue #, chosen platform, and post to Mem0 ("newsletter") so we don't
+repeat an angle — and so `/promote` and `growth-strategist` can build on it week over week.

@@ -6,8 +6,8 @@ Dallas shipping several apps at once — instead of generic productivity boilerp
 
 > Built to be portable. It currently lives in this repo under
 > `productivity-plugin/`, but it's a self-contained Claude Code plugin
-> (`.claude-plugin/plugin.json` + `commands/` + `agents/` + `hooks/`) and can be
-> moved to its own repo/marketplace unchanged.
+> (`.claude-plugin/plugin.json` + `commands/` + `agents/` + `hooks/` + `templates/`)
+> and can be moved to its own repo/marketplace unchanged.
 
 ## What it knows about me
 
@@ -36,14 +36,22 @@ Dallas shipping several apps at once — instead of generic productivity boilerp
 | `/pr-review [pr]` | Reviews a PR or your working diff against the repo's `CLAUDE.md` rules. |
 | `/revenue [period]` | Read-only Stripe + PayPal money snapshot; surfaces disputes/failed charges first. |
 | `/invoices [...]` | Invoice status via PayPal; can draft/create with confirmation (never sends silently). |
-| `/promote <what>` | Platform-tailored launch posts (LinkedIn / X / Reddit / IG / TikTok) grounded in what actually shipped. |
+| `/promote <what>` | Platform-tailored launch posts (LinkedIn / X / Reddit / IG / TikTok) grounded in what actually shipped. Handles the `/newsletter` hand-off: leads with the advised platform and publishes via SocialOS behind an explicit confirm. |
 | `/grow [focus]` | Weekly highest-leverage growth move — GitHub profile, portfolio, audience, or hireability. |
-| `/newsletter [topic]` | Researches a tech topic, **verifies every source and stat via WebFetch**, and builds a polished, responsive HTML email newsletter. Defaults to a "latest in robotics, autonomy & industrial IoT" issue (semiconductors → field autonomy → IIoT/edge). |
+| `/newsletter [topic]` | Researches a tech topic, **verifies every source and stat via WebFetch**, builds the issue from the **Fab Signal console template**, and hands off to `/promote` to publish on the advised platform. Defaults to a "latest in robotics, autonomy & industrial IoT" issue. |
 
 ## Agents
 
 - **`standup-scout`** (haiku) — gathers one repo's status; spawned in parallel by `/standup`.
 - **`growth-strategist`** (sonnet) — marketing / personal-brand strategist grounded in what actually shipped.
+
+## Templates
+
+- **`templates/newsletter-console.html`** — the **Fab Signal console**: the canonical
+  skeleton `/newsletter` builds every issue from. A self-contained, interactive
+  "operator console" (signals-terminal aesthetic — animated signal-trace header,
+  pillar filter, count-up telemetry gauges, reading-progress line, light/dark toggle),
+  reduced-motion aware and CDN-free. Swap the content slots; keep the design system.
 
 ## Hooks
 
