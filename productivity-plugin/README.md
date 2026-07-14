@@ -38,7 +38,7 @@ Dallas shipping several apps at once — instead of generic productivity boilerp
 | `/invoices [...]` | Invoice status via PayPal; can draft/create with confirmation (never sends silently). |
 | `/promote <what>` | Platform-tailored launch posts (LinkedIn / X / Reddit / IG / TikTok) grounded in what actually shipped. Handles the `/newsletter` hand-off: leads with the advised platform and publishes via SocialOS behind an explicit confirm. |
 | `/grow [focus]` | Weekly highest-leverage growth move — GitHub profile, portfolio, audience, or hireability. |
-| `/newsletter [topic]` | Researches a tech topic, **verifies every source and stat via WebFetch**, builds the issue from the **Fab Signal console template**, and hands off to `/promote` to publish on the advised platform. Defaults to a "latest in robotics, autonomy & industrial IoT" issue. |
+| `/newsletter [topic]` | Researches a tech topic under a **hard 14-day recency gate** (stories rejected on publication date, not relevance), **verifies every source and stat**, builds one tile per section from the **Fab Signal console template**, and hands off to `/promote` to publish on the advised platform. Defaults to a "latest in robotics, autonomy & industrial IoT" issue. |
 
 ## Agents
 

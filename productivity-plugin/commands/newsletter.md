@@ -23,11 +23,13 @@ and adjacent frontier tech. Lead with what's genuinely new, not evergreen backgr
   across semiconductors, advanced manufacturing, and adjacent industries.
 - **Default subtitle** (editable — this is a default, not a hard constraint):
   `Weekly Intelligence on Robotics, Autonomy & Industrial IoT — Semiconductors to the Field`
-- **Recency filter:** this is a *weekly* — strongly prefer developments from roughly
-  the **last 14 days**. If a pillar has no fresh news, say so briefly rather than
-  padding with old material. Date-check each item during research.
-- **Pillars to cover** (pick the freshest 1–2 items per pillar; drop a pillar if
-  nothing new landed):
+- **Recency is a hard gate, not a preference:** this is a *weekly*. Every story must
+  carry a **primary publication date within the last 14 days** — enforced by the
+  RECENCY GATE in the workflow below. A section with nothing in-window is marked
+  **QUIET**, never backfilled with older material.
+- **Output shape:** **one summarized tile per section**, with links inline as needed.
+  Keep each section to a single tile unless the user explicitly asks to expand.
+- **Sections to cover** (one tile each; mark a section QUIET if nothing lands in-window):
   - **Fab robotics & automation** — the semiconductor anchor: AMHS/OHT wafer
     logistics, cleanroom cobots, direct-drive SCARA, vacuum wafer handling, ISO
     Class 1–5 rules, and the sensor/motor silicon that makes chips (TI, GF, ASML,
@@ -43,19 +45,57 @@ and adjacent frontier tech. Lead with what's genuinely new, not evergreen backgr
 
 ## Workflow (do not skip steps)
 
-1. **Research first, recent first.** Run `WebSearch` for each pillar (or the given
-   topic), biasing queries toward the last ~2 weeks. Prefer official press releases,
-   company blogs/newsrooms, and reputable industry/robotics press (SEMI, IEEE
-   Spectrum, EE Times, The Robot Report, sUAS News, etc.). Confirm each item's date.
-2. **Verify every source before you cite it.** `WebFetch` each candidate URL and
-   confirm (a) it actually resolves and (b) it says what you're about to claim.
-   **Only real, fetched URLs go in the newsletter — never a placeholder, guessed,
-   or "example.com" link.** If you can't verify a link, drop the claim.
-3. **Ground every number.** Any percentage, dollar figure, or market stat in the
-   metrics block must trace to a verified source. If you can't source a figure,
-   omit it or label it clearly as illustrative — do not fabricate precision.
-4. **Date it today.** Use the real current date; derive a plausible Issue # from it.
-5. **Write, then build the HTML** to the spec below.
+> **Why this is strict:** the failure mode of a "weekly" is quietly shipping months-old
+> stories that are still *topically* relevant. The gate below exists to make that
+> impossible. Recency is decided by **dates, not vibes** — an item is in or out based on
+> its publication date, never on how relevant or interesting it feels.
+
+1. **Establish TODAY and the WINDOW first — before any search.** Read the real current
+   date from the environment (the harness provides it; do not guess). Compute and write
+   down literally:
+   - `TODAY = <YYYY-MM-DD>`
+   - `WINDOW_START = TODAY − 14 days = <YYYY-MM-DD>`
+   Every story must be dated **on or after `WINDOW_START`**. Put the window in the issue's
+   meta bar (e.g. "Window: Jun 29 – Jul 13") so the constraint is visible in the output.
+
+2. **Date-anchored research.** For each section, run `WebSearch` with queries that pin the
+   month/year and recency (e.g. `"<topic> news July 2026"`, `"this week"`, a specific
+   recent date). Prefer official press releases, company newsrooms, and reputable
+   industry/robotics press (SEMI, IEEE Spectrum, EE Times, The Robot Report, sUAS News).
+   **For every candidate, capture its explicit primary publication date** from the source
+   (the dateline, URL date, or "Published" field) — an item with no establishable date is
+   not a candidate.
+
+3. **⛔ RECENCY GATE — apply mechanically, reject on date alone.** For each candidate, keep
+   it **only if** its primary publication date ≥ `WINDOW_START`. Otherwise **discard it —
+   no exceptions:**
+   - Do **not** keep an old story because it's "still relevant," "foundational," or "the
+     best example." Relevance is not recency.
+   - Do **not** launder an old event through a fresh page: a roundup, market-report,
+     "guide," listicle, or re-post published this week about an event from months ago is
+     **out** — the date that matters is the *event's original announcement date*.
+   - A rule/regulation counts only if a **dated development** (final rule, vote, filing,
+     enforcement date) fell inside the window — not the fact that it's a current topic.
+   - If you can't pin a date to within the window, treat it as **out**.
+   After the gate, write a one-line ledger per section: `§NN <section> — <item + date>` or
+   `§NN <section> — QUIET (nothing in-window)`. A QUIET section ships as a short honest
+   "quiet pillar" tile; it is never backfilled.
+
+4. **Verify every surviving source.** `WebFetch` each kept URL and confirm it (a) resolves
+   and (b) says what you'll claim. **Only real, fetched URLs ship — never a placeholder or
+   guessed link.** (WebFetch may 403 on anti-bot sites; if so, rely on the dated
+   search-result content and say so — but the date still has to clear the gate.)
+
+5. **Ground every number.** Every gauge/stat must trace to a verified in-window source.
+   If you can't source a figure, omit it — do not fabricate precision.
+
+6. **Compose one tile per section**, then derive the Issue # from the date.
+
+7. **✅ Pre-build self-audit (last check before HTML).** List every chosen tile with its
+   date next to `WINDOW_START`. If *any* tile is older than the window, remove it and mark
+   that section QUIET. Only once every remaining tile clears the window do you build.
+
+8. **Build the HTML** to the spec below.
 
 ## Editorial
 
@@ -76,14 +116,19 @@ filter chips + counts, telemetry gauges, footer). Keep the design system intact:
   wafer-lattice dot grid, monospace carrying the instrumentation (channel IDs, meta
   bar, gauge digits). Amber is a *semantic* CAPEX/alert chip only, never the accent.
 - **Structure the template already ships:** reading-progress signal line · animated
-  signal-trace header canvas · sticky **pillar filter** (chips with live counts) ·
+  signal-trace header canvas · sticky **section nav** (chips with live counts) ·
   numbered section headers · **Intel Cards** as "channels" (`CH·NN`, category badge,
   `data-cat`) · **telemetry gauges** that count up on scroll · console status-bar footer.
 - **Wiring rules when you swap content:**
-  - Give every card a real `data-cat` (`fab` | `edge` | `market` | `field` | `iiot`)
-    and update the filter chips + their counts to match what actually shipped. Drop a
-    chip if its count is 0 — don't fake a populated pillar.
-  - Every gauge figure carries `data-target` and must trace to a verified source.
+  - **One tile per section** by default. Give each tile a real `data-cat`
+    (`field` | `logi` | `edge` | `iiot` | `fab` | `market`) and make the nav chips +
+    their counts match the sections that actually shipped.
+  - **Surface the dates.** Put each tile's publication date in its channel strip (the
+    `.sigid`), and put `WINDOW_START – TODAY` in the meta bar and `WINDOW · PAST 14 DAYS`
+    in the footer status bar — the recency gate should be visible, not just internal.
+  - A **QUIET** section still ships as one honest tile ("no marquee news this fortnight —
+    here's what's teed up"); never fake a populated section.
+  - Every gauge figure carries `data-target` and must trace to a verified in-window source.
   - Every CTA/`.src` link is a real, verified URL (per the workflow above).
 - **Interactivity is first-class:** it's built to be *operated*. Keep it self-contained
   (inline CSS/JS, no external fonts/CDNs), theme-toggle + `prefers-color-scheme` at the
@@ -96,7 +141,8 @@ filter chips + counts, telemetry gauges, footer). Keep the design system intact:
 1. A short bulleted summary of the technical highlights **and** the design/UX choices.
 2. The finished HTML (save to a file; offer to publish it as an **Artifact** so the
    user can view/operate it live).
-3. One real, verified supplementary **video** link — `WebFetch`-checked like every link.
+3. *(Optional)* one real, verified supplementary **video** link as a visual aid — it's a
+   reference, not a news item, so it isn't recency-gated, but keep it relevant and current.
 
 ## Promote — publish to the advised platform
 
