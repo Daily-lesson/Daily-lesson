@@ -1,6 +1,6 @@
 ---
 description: Research and build a polished, source-verified HTML newsletter on a tech topic
-argument-hint: "[topic — default: semiconductor fab robotics & automation (TI)]"
+argument-hint: "[topic — default: latest in robotics, autonomy & industrial IoT]"
 allowed-tools: WebSearch, WebFetch, mcp__Mem0__search_memories, mcp__Mem0__add_memory, Write, Read
 ---
 
@@ -13,24 +13,40 @@ no dead links.
 
 ## Default preset (when no topic is given)
 
-- **Beat:** breakthroughs in robotics & automation applied to semiconductor
-  manufacturing fabs.
-- **Required subtitle (use verbatim):** `Weekly Intelligence on Semiconductor Robotics & Automation for Texas Instruments`
-- **Sections to cover:**
-  - **Texas Instruments** — 300mm fab expansions (Sherman TX, Lehi UT), Automated
-    Material Handling Systems (AMHS), and hardware/sensor robotics (real-time
-    processing, mmWave radar, motor control).
-  - **GlobalFoundries** — strategic collaborations (Siemens, Renesas), "Physical AI"
-    (compute intelligence pushed to edge robotics on the floor), and automated fab
-    logistics (ceiling-mounted overhead transport / OHT).
-  - **Cleanroom automation trends** — sub-micron wafer logistics, cobots,
-    direct-drive SCARA, vacuum wafer handling, ISO Class 1–5 contamination rules.
+The reader is a **robotics engineer** working on autonomous systems (Boston
+Dynamics Spot, BVLOS drones) and the IoT around them across a large manufacturing
+network. The beat is **the latest and greatest in robotics, autonomy, and
+industrial IoT** — anchored in the semiconductor space but spanning their own field
+and adjacent frontier tech. Lead with what's genuinely new, not evergreen background.
+
+- **Beat:** newest developments in robotics, autonomous systems, and industrial IoT
+  across semiconductors, advanced manufacturing, and adjacent industries.
+- **Default subtitle** (editable — this is a default, not a hard constraint):
+  `Weekly Intelligence on Robotics, Autonomy & Industrial IoT — Semiconductors to the Field`
+- **Recency filter:** this is a *weekly* — strongly prefer developments from roughly
+  the **last 14 days**. If a pillar has no fresh news, say so briefly rather than
+  padding with old material. Date-check each item during research.
+- **Pillars to cover** (pick the freshest 1–2 items per pillar; drop a pillar if
+  nothing new landed):
+  - **Fab robotics & automation** — the semiconductor anchor: AMHS/OHT wafer
+    logistics, cleanroom cobots, direct-drive SCARA, vacuum wafer handling, ISO
+    Class 1–5 rules, and the sensor/motor silicon that makes chips (TI, GF, ASML,
+    Siemens, and the fab-automation vendors).
+  - **Field & mobile autonomy** — the reader's day-to-day: legged robots (Spot),
+    humanoids, AMRs/AGVs, BVLOS drones and drone-in-a-box, and fleet-operations
+    tooling. New models, deployments, autonomy-stack and regulatory (FAA/BVLOS) news.
+  - **Industrial IoT & edge** — sensors, edge AI/compute, private 5G, digital twins,
+    and predictive maintenance across manufacturing networks.
+  - **Adjacent frontier / signal** — one wildcard: physical-AI and robotics
+    foundation models, new robotics silicon (e.g. NVIDIA Jetson/Thor, Qualcomm, TI),
+    standards & safety, or notable funding/M&A worth the reader's attention.
 
 ## Workflow (do not skip steps)
 
-1. **Research first.** Run `WebSearch` for each section/company. Prefer official
-   press releases, company blogs/newsrooms, and reputable industry press
-   (SEMI, IEEE Spectrum, EE Times, etc.).
+1. **Research first, recent first.** Run `WebSearch` for each pillar (or the given
+   topic), biasing queries toward the last ~2 weeks. Prefer official press releases,
+   company blogs/newsrooms, and reputable industry/robotics press (SEMI, IEEE
+   Spectrum, EE Times, The Robot Report, sUAS News, etc.). Confirm each item's date.
 2. **Verify every source before you cite it.** `WebFetch` each candidate URL and
    confirm (a) it actually resolves and (b) it says what you're about to claim.
    **Only real, fetched URLs go in the newsletter — never a placeholder, guessed,
