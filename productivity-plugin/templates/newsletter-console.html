@@ -1,0 +1,665 @@
+<!--
+  ============================================================================
+  FAB SIGNAL CONSOLE — canonical skeleton for the /newsletter command.
+  This is the default template every weekly issue is built from. Keep the
+  design system (tokens, layout, interactions) intact; swap only the CONTENT
+  slots: masthead/subtitle, meta bar, the <article class="intel"> cards
+  (with data-cat = fab | edge | market | field | iiot), the filter chips +
+  their counts, the telemetry gauges, and the footer. Every link must be
+  real and verified per the command's rules. The sample content below is the
+  last built issue (No. 29) — replace it, don't ship it verbatim.
+  ============================================================================
+-->
+<title>Silicon &amp; Autonomy Intelligence — Fab Signal Console</title>
+<style>
+  :root{
+    color-scheme: light dark;
+    /* type */
+    --mono: ui-monospace, "JetBrains Mono", "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    /* dark (default) */
+    --ground:#0a0f18;
+    --ground-2:#070b12;
+    --panel:#101826;
+    --panel-2:#16202f;
+    --line:#23304a;
+    --line-soft:#1a2436;
+    --ink:#e8eef7;
+    --ink-dim:#c2cede;
+    --muted:#8a9bb5;
+    --signal:#2fe6cf;
+    --signal-deep:#0f766e;
+    --signal-glow:rgba(47,230,207,.16);
+    --amber:#f5b544;
+    --violet:#a9a7ff;
+    --grid-dot:rgba(120,150,190,.10);
+    --card-sheen:rgba(47,230,207,.05);
+    --shadow:0 30px 70px rgba(0,0,0,.55);
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --ground:#e9eef5;
+      --ground-2:#dde4ee;
+      --panel:#ffffff;
+      --panel-2:#f3f6fb;
+      --line:#d2dce9;
+      --line-soft:#e2e9f2;
+      --ink:#0d1726;
+      --ink-dim:#2c3a4f;
+      --muted:#586a83;
+      --signal:#0c8f80;
+      --signal-deep:#0a6f63;
+      --signal-glow:rgba(12,143,128,.12);
+      --amber:#a8730a;
+      --violet:#5b57c9;
+      --grid-dot:rgba(40,70,110,.08);
+      --card-sheen:rgba(12,143,128,.04);
+      --shadow:0 24px 50px rgba(30,50,80,.16);
+    }
+  }
+  /* explicit toggle wins over media query, both directions */
+  :root[data-theme="dark"]{
+    --ground:#0a0f18;--ground-2:#070b12;--panel:#101826;--panel-2:#16202f;
+    --line:#23304a;--line-soft:#1a2436;--ink:#e8eef7;--ink-dim:#c2cede;--muted:#8a9bb5;
+    --signal:#2fe6cf;--signal-deep:#0f766e;--signal-glow:rgba(47,230,207,.16);
+    --amber:#f5b544;--violet:#a9a7ff;--grid-dot:rgba(120,150,190,.10);
+    --card-sheen:rgba(47,230,207,.05);--shadow:0 30px 70px rgba(0,0,0,.55);
+  }
+  :root[data-theme="light"]{
+    --ground:#e9eef5;--ground-2:#dde4ee;--panel:#ffffff;--panel-2:#f3f6fb;
+    --line:#d2dce9;--line-soft:#e2e9f2;--ink:#0d1726;--ink-dim:#2c3a4f;--muted:#586a83;
+    --signal:#0c8f80;--signal-deep:#0a6f63;--signal-glow:rgba(12,143,128,.12);
+    --amber:#a8730a;--violet:#5b57c9;--grid-dot:rgba(40,70,110,.08);
+    --card-sheen:rgba(12,143,128,.04);--shadow:0 24px 50px rgba(30,50,80,.16);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, var(--signal-glow), transparent 60%),
+      radial-gradient(circle at 1px 1px, var(--grid-dot) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--ground) 0%, var(--ground-2) 100%);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:var(--signal);text-decoration:none;}
+  ::selection{background:var(--signal);color:var(--ground);}
+
+  /* reading progress */
+  .progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;
+    background:linear-gradient(90deg,var(--signal-deep),var(--signal));
+    box-shadow:0 0 12px var(--signal);
+    z-index:60;transition:width .1s linear;
+  }
+
+  .shell{max-width:720px;margin:0 auto;padding:0 18px 60px;}
+
+  /* ---------- HEADER ---------- */
+  .console{
+    margin-top:26px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    position:relative;
+  }
+  .console::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,transparent,transparent 60%,var(--card-sheen));
+  }
+  .header{position:relative;padding:26px 28px 22px;border-bottom:1px solid var(--line);}
+  .scope{position:absolute;inset:0;width:100%;height:100%;opacity:.55;}
+  .header-inner{position:relative;z-index:2;}
+  .brandbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+  .sysid{font-family:var(--mono);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal);}
+  @media (prefers-reduced-motion: no-preference){ .dot{animation:pulse 2.4s ease-in-out infinite;} }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.7);}}
+
+  .toggle{
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);background:transparent;border:1px solid var(--line);
+    padding:6px 11px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:7px;
+    transition:border-color .2s,color .2s;
+  }
+  .toggle:hover{color:var(--ink);border-color:var(--signal-deep);}
+  .toggle:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
+
+  .eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.34em;text-transform:uppercase;color:var(--signal);margin:0 0 12px;}
+  .masthead{
+    margin:0;font-family:var(--sans);font-weight:800;
+    font-size:clamp(2rem,6vw,3.05rem);line-height:1.02;letter-spacing:-.03em;
+    color:var(--ink);text-wrap:balance;
+  }
+  .masthead .amp{color:var(--muted);font-weight:400;}
+  .masthead .hl{color:var(--signal);}
+  .subtitle{
+    margin:16px 0 0;font-size:.98rem;color:var(--ink-dim);max-width:56ch;
+    padding-left:14px;border-left:2px solid var(--signal);
+  }
+
+  /* meta bar */
+  .metabar{
+    display:flex;flex-wrap:wrap;gap:2px;font-family:var(--mono);font-size:.68rem;
+    border-top:1px solid var(--line);
+  }
+  .metabar div{
+    flex:1 1 auto;min-width:120px;padding:11px 16px;
+    border-right:1px solid var(--line-soft);
+    display:flex;flex-direction:column;gap:3px;
+  }
+  .metabar div:last-child{border-right:0;}
+  .metabar .k{color:var(--muted);letter-spacing:.16em;text-transform:uppercase;font-size:.58rem;}
+  .metabar .v{color:var(--ink);letter-spacing:.04em;}
+  .metabar .v.live{color:var(--signal);}
+
+  /* ---------- FILTER NAV ---------- */
+  .navwrap{position:sticky;top:0;z-index:40;margin-top:14px;}
+  .nav{
+    display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+    padding:10px;border:1px solid var(--line);border-radius:14px;
+    background:color-mix(in srgb, var(--panel) 82%, transparent);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 10px 30px rgba(0,0,0,.28);
+  }
+  .nav .label{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 8px 0 6px;}
+  .chip{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink-dim);background:transparent;border:1px solid var(--line);
+    padding:7px 13px;border-radius:999px;cursor:pointer;
+    transition:all .2s ease;display:inline-flex;align-items:center;gap:7px;
+  }
+  .chip .ct{font-size:.6rem;color:var(--muted);}
+  .chip:hover{border-color:var(--signal-deep);color:var(--ink);}
+  .chip:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
+  .chip[aria-pressed="true"]{
+    background:var(--signal);border-color:var(--signal);color:var(--ground);
+    box-shadow:0 0 20px var(--signal-glow);
+  }
+  .chip[aria-pressed="true"] .ct{color:var(--ground);opacity:.7;}
+
+  /* ---------- BODY ---------- */
+  .body{padding:30px 28px 10px;}
+  .lead-tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--signal);margin:0 0 10px;}
+  .lead{font-size:1.06rem;color:var(--ink-dim);margin:0;max-width:64ch;}
+  .lead b{color:var(--ink);}
+
+  .section-head{margin:40px 0 18px;display:flex;align-items:baseline;gap:14px;}
+  .section-head .num{font-family:var(--mono);font-size:.72rem;color:var(--signal);letter-spacing:.1em;padding-top:4px;white-space:nowrap;}
+  .section-head h2{margin:0;font-size:clamp(1.2rem,2.8vw,1.5rem);font-weight:750;letter-spacing:-.01em;color:var(--ink);}
+  .section-head p{margin:2px 0 0;font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.06em;}
+  .section-head .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);align-self:center;}
+
+  /* intel card */
+  .intel{
+    position:relative;border:1px solid var(--line);border-radius:14px;
+    background:var(--panel);margin:0 0 14px;overflow:hidden;
+    transition:opacity .35s ease, transform .35s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .intel::after{ /* scanline sweep on hover */
+    content:"";position:absolute;top:0;left:-60%;width:60%;height:100%;
+    background:linear-gradient(100deg,transparent,var(--card-sheen),transparent);
+    transition:none;pointer-events:none;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .intel:hover::after{animation:sweep .9s ease;}
+  }
+  @keyframes sweep{from{left:-60%;}to{left:120%;}}
+  .intel:hover{border-color:var(--signal-deep);box-shadow:0 16px 40px rgba(0,0,0,.30);transform:translateY(-2px);}
+
+  .intel-grid{display:grid;grid-template-columns:118px 1fr;}
+  .channel{
+    padding:18px 14px;border-right:1px solid var(--line-soft);
+    background:linear-gradient(180deg,var(--panel-2),transparent);
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .badge{
+    font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    padding:5px 8px;border-radius:6px;color:var(--signal);
+    border:1px solid var(--signal-deep);background:var(--signal-glow);width:max-content;
+  }
+  .badge.capex{color:var(--amber);border-color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent);}
+  .badge.edge{color:var(--violet);border-color:var(--violet);background:color-mix(in srgb,var(--violet) 14%,transparent);}
+  .sigid{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.08em;line-height:1.5;margin-top:auto;}
+  .sigid span{color:var(--ink-dim);}
+
+  .content{padding:20px 22px 18px;}
+  .intel h3{margin:0 0 9px;font-size:1.12rem;font-weight:700;line-height:1.32;letter-spacing:-.01em;color:var(--ink);text-wrap:balance;}
+  .intel p{margin:0 0 14px;font-size:.96rem;color:var(--ink-dim);max-width:62ch;}
+  .cta{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--signal);display:inline-flex;align-items:center;gap:8px;}
+  .cta .arw{transition:transform .2s ease;}
+  .intel:hover .cta .arw{transform:translateX(4px);}
+  .src{display:block;margin-top:12px;font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.02em;line-height:1.6;}
+  .src a{color:var(--muted);text-decoration:underline;text-underline-offset:2px;}
+  .src a:hover{color:var(--signal);}
+
+  .intel.is-hidden{opacity:0;transform:scale(.98);display:none;}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(18px);}
+  .reveal.in{opacity:1;transform:none;transition:opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1);}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1;transform:none;} }
+
+  /* ---------- TELEMETRY / METRICS ---------- */
+  .telemetry{
+    margin:40px 0 6px;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:
+      linear-gradient(180deg,var(--panel-2),var(--panel)),
+      radial-gradient(circle at 1px 1px, var(--grid-dot) 1px, transparent 0) 0 0/18px 18px;
+  }
+  .telemetry .thead{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);}
+  .telemetry .thead h4{margin:0;font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--signal);}
+  .telemetry .thead span{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.08em;}
+  .gauges{display:grid;grid-template-columns:repeat(3,1fr);}
+  .gauge{padding:24px 18px;text-align:center;border-right:1px solid var(--line-soft);}
+  .gauge:last-child{border-right:0;}
+  .gauge .val{font-family:var(--mono);font-weight:700;font-size:clamp(2.1rem,7vw,3rem);line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+  .gauge .val .u{color:var(--signal);}
+  .gauge .lbl{margin-top:12px;font-size:.74rem;color:var(--muted);line-height:1.5;max-width:26ch;margin-left:auto;margin-right:auto;}
+  .gauge .track{height:3px;margin-top:16px;border-radius:2px;background:var(--line);overflow:hidden;}
+  .gauge .fill{height:100%;width:0;background:linear-gradient(90deg,var(--signal-deep),var(--signal));transition:width 1.2s cubic-bezier(.2,.7,.2,1);}
+
+  /* ---------- FOOTER ---------- */
+  .footer{margin-top:22px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2);overflow:hidden;}
+  .statusbar{display:flex;flex-wrap:wrap;gap:2px;font-family:var(--mono);font-size:.62rem;border-bottom:1px solid var(--line-soft);}
+  .statusbar div{flex:1 1 auto;min-width:130px;padding:10px 16px;border-right:1px solid var(--line-soft);color:var(--muted);letter-spacing:.06em;}
+  .statusbar div:last-child{border-right:0;}
+  .statusbar b{color:var(--signal);font-weight:600;}
+  .foot-body{padding:18px 20px 22px;font-size:.8rem;color:var(--muted);line-height:1.7;}
+  .foot-body .disclaimer{color:var(--muted);opacity:.85;font-style:italic;}
+  .foot-body .ref{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);border:1px solid var(--line);padding:9px 14px;border-radius:999px;transition:border-color .2s,color .2s;}
+  .foot-body .ref:hover{border-color:var(--signal-deep);color:var(--signal);}
+
+  .signoff{text-align:center;font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin:24px 0 0;opacity:.7;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:600px){
+    .header{padding:22px 18px 18px;}
+    .body{padding:24px 18px 6px;}
+    .intel-grid{grid-template-columns:1fr;}
+    .channel{flex-direction:row;align-items:center;border-right:0;border-bottom:1px solid var(--line-soft);padding:12px 16px;}
+    .sigid{margin-top:0;margin-left:auto;text-align:right;}
+    .gauges{grid-template-columns:1fr;}
+    .gauge{border-right:0;border-bottom:1px solid var(--line-soft);}
+    .gauge:last-child{border-bottom:0;}
+    .section-head{flex-wrap:wrap;gap:6px 12px;}
+    .metabar div{min-width:50%;}
+  }
+</style>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<div class="shell">
+  <div class="console">
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+      <canvas class="scope" id="scope" aria-hidden="true"></canvas>
+      <div class="header-inner">
+        <div class="brandbar">
+          <div class="sysid"><span class="dot"></span> Signal&nbsp;·&nbsp;Console&nbsp;·&nbsp;Online</div>
+          <button class="toggle" id="themeToggle" type="button" aria-label="Toggle light or dark theme">
+            <span id="themeIcon">◑</span><span id="themeText">Theme</span>
+          </button>
+        </div>
+        <p class="eyebrow">Robotics · Autonomy · Industrial IoT Intelligence</p>
+        <h1 class="masthead">Silicon <span class="amp">&amp;</span> <span class="hl">Autonomy</span> Intelligence</h1>
+        <p class="subtitle">Weekly Intelligence on Robotics, Autonomy &amp; Industrial IoT — Semiconductors to the Field.</p>
+      </div>
+    </header>
+
+    <div class="metabar">
+      <div><span class="k">Issue</span><span class="v">No. 29 · Vol. 1</span></div>
+      <div><span class="k">Transmission</span><span class="v">July 14, 2026</span></div>
+      <div><span class="k">Channels</span><span class="v">07 active</span></div>
+      <div><span class="k">Classification</span><span class="v live">Internal</span></div>
+    </div>
+  </div>
+
+  <!-- ================= FILTER NAV ================= -->
+  <div class="navwrap">
+    <nav class="nav" id="nav" aria-label="Filter intel by channel">
+      <span class="label">Filter</span>
+      <button class="chip" data-filter="all" aria-pressed="true" type="button">All <span class="ct">07</span></button>
+      <button class="chip" data-filter="fab" aria-pressed="false" type="button">Fab &amp; Cleanroom <span class="ct">04</span></button>
+      <button class="chip" data-filter="edge" aria-pressed="false" type="button">AI &amp; Edge <span class="ct">02</span></button>
+      <button class="chip" data-filter="market" aria-pressed="false" type="button">Market <span class="ct">01</span></button>
+    </nav>
+  </div>
+
+  <div class="console" style="margin-top:14px;">
+    <div class="body">
+
+      <p class="lead-tag">▏Executive Summary</p>
+      <p class="lead reveal">
+        The U.S. fab build-out has crossed from concrete to cadence. Texas Instruments has moved
+        its $60B Sherman "mega-fab" (SM1) into volume production, and the story this quarter is no
+        longer capacity — it is <b>autonomy density</b>: how many wafer moves, inspections, and
+        tool-to-tool handoffs happen with zero human contact. GlobalFoundries and Siemens have
+        formalized an AI-driven manufacturing alliance pushing intelligence to the fab floor, while
+        the wafer-handling layer standardizes on direct-drive SCARA and vacuum end-effectors rated
+        to ISO Class 1. Below: the developments that matter, and the numbers underneath them.
+      </p>
+
+      <!-- ===== SECTION 1 ===== -->
+      <div class="section-head reveal">
+        <span class="num">§01</span>
+        <div><h2>Texas Instruments — Sherman Comes Online</h2><p>300mm capacity · AMHS backbone · sensor-level robotics</p></div>
+        <span class="rule"></span>
+      </div>
+
+      <article class="intel reveal" data-cat="fab">
+        <div class="intel-grid">
+          <div class="channel">
+            <span class="badge capex">Fab Capex</span>
+            <span class="sigid">CH·<span>01</span><br>SM1 / TX</span>
+          </div>
+          <div class="content">
+            <h3>SM1 reaches volume production three-and-a-half years after groundbreaking</h3>
+            <p>TI has begun volume production at its newest 300mm facility in Sherman, TX — the first of four planned fabs on the site and the anchor of a $60B, seven-fab program across Texas and Utah. At full ramp the campus is engineered to output tens of millions of analog and embedded-processing chips per day; analysts project Sherman alone could hold roughly a fifth of global 300mm analog capacity by 2030. Running a fab of this cadence is a materials-logistics problem first: every wafer lot moves under automation.</p>
+            <a class="cta" href="https://www.ti.com/about-ti/newsroom/news-releases/2025/texas-instruments-begins-production-at-its-newest-300mm-semiconductor-manufacturing-facility-in-sherman-texas.html" target="_blank" rel="noopener">Read TI's production announcement <span class="arw">→</span></a>
+            <span class="src">PRIMARY · <a href="https://www.ti.com/about-ti/newsroom/news-releases/2025/texas-instruments-begins-production-at-its-newest-300mm-semiconductor-manufacturing-facility-in-sherman-texas.html" target="_blank" rel="noopener">ti.com/newsroom</a> · CONTEXT · <a href="https://www.ti.com/about-ti/company/ti-at-a-glance/manufacturing/sherman.html" target="_blank" rel="noopener">TI Sherman site profile</a></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="intel reveal" data-cat="fab">
+        <div class="intel-grid">
+          <div class="channel">
+            <span class="badge">AMHS</span>
+            <span class="sigid">CH·<span>02</span><br>OHT / RAIL</span>
+          </div>
+          <div class="content">
+            <h3>The overhead rail is the real production line</h3>
+            <p>Behind the tool sets, a ceiling-mounted Automated Material Handling System does the work of the fab floor: standardized FOUPs carrying 25 wafers ride an overhead hoist-transport (OHT) rail network between process tools, eliminating cleanroom floor traffic and human contact with in-process wafers. For TI, AMHS throughput and routing intelligence — not just tool count — set the effective ceiling on how fast SM1 can ramp against demand.</p>
+            <a class="cta" href="https://www.eetimes.com/inside-texas-instruments-new-300mm-fab-in-sherman-texas/" target="_blank" rel="noopener">Go inside the Sherman fab <span class="arw">→</span></a>
+            <span class="src">REFERENCE · <a href="https://www.eetimes.com/inside-texas-instruments-new-300mm-fab-in-sherman-texas/" target="_blank" rel="noopener">EE Times — Inside TI's Sherman fab</a></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="intel reveal" data-cat="edge">
+        <div class="intel-grid">
+          <div class="channel">
+            <span class="badge edge">Sensor · Silicon</span>
+            <span class="sigid">CH·<span>03</span><br>EDGE / MCU</span>
+          </div>
+          <div class="content">
+            <h3>TI's other robotics play: the chips inside the robots</h3>
+            <p>TI's automation footprint isn't only in its own fabs — its analog and embedded portfolio is a building block for the robots doing the handling. Real-time C2000 motor-control MCUs, mmWave radar for presence and collision sensing, and precision signal-chain parts are exactly the sensor-and-actuation layer that direct-drive wafer robots and mobile cobots depend on. The vertical loop is tightening: chips that move wafers, made in fabs that move wafers autonomously.</p>
+            <a class="cta" href="https://www.ti.com/applications/industrial/robotics/overview.html" target="_blank" rel="noopener">Explore TI robotics systems <span class="arw">→</span></a>
+            <span class="src">REFERENCE · <a href="https://www.ti.com/applications/industrial/robotics/overview.html" target="_blank" rel="noopener">TI robotics applications hub</a></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== SECTION 2 ===== -->
+      <div class="section-head reveal">
+        <span class="num">§02</span>
+        <div><h2>GlobalFoundries — Intelligence Moves to the Floor</h2><p>The Siemens alliance · "Physical AI" at the edge</p></div>
+        <span class="rule"></span>
+      </div>
+
+      <article class="intel reveal" data-cat="edge">
+        <div class="intel-grid">
+          <div class="channel">
+            <span class="badge edge">AI · Edge</span>
+            <span class="sigid">CH·<span>04</span><br>GF × SIE</span>
+          </div>
+          <div class="content">
+            <h3>Siemens + GlobalFoundries formalize an AI-manufacturing alliance</h3>
+            <p>Announced in December 2025, the collaboration pairs GF's manufacturing scale with Siemens' automation, electrification, and digital-twin software stack — spanning chip design through product-lifecycle management. The thesis is "Physical AI": pushing compute intelligence off the central MES and onto edge robotics and tools on the floor, so decisions about routing, inspection, and fault response happen where the wafer is. The partners frame it as resilience for the global supply chain, with spillover into robotics and energy systems.</p>
+            <a class="cta" href="https://gf.com/gf-press-release/siemens-and-globalfoundries-collaborate-to-deploy-ai-driven-manufacturing-to-strengthen-global-semiconductor-supply/" target="_blank" rel="noopener">Read the GF announcement <span class="arw">→</span></a>
+            <span class="src">PRIMARY · <a href="https://gf.com/gf-press-release/siemens-and-globalfoundries-collaborate-to-deploy-ai-driven-manufacturing-to-strengthen-global-semiconductor-supply/" target="_blank" rel="noopener">gf.com press release</a> · <a href="https://press.siemens.com/global/en/pressrelease/siemens-and-globalfoundries-collaborate-deploy-ai-driven-manufacturing-strengthen" target="_blank" rel="noopener">Siemens newsroom</a></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="intel reveal" data-cat="market">
+        <div class="intel-grid">
+          <div class="channel">
+            <span class="badge">Fab Logistics</span>
+            <span class="sigid">CH·<span>05</span><br>AMHS / MKT</span>
+          </div>
+          <div class="content">
+            <h3>Foundries are now the dominant buyer of 300mm AMHS</h3>
+            <p>OHT held the largest equipment-type revenue share of the semiconductor AMHS market in 2025, and foundries — GF among the named expansion leaders alongside TSMC and Samsung — retained the dominant end-user position. Translation: the capacity race is being fought as much on rail-network density and carrier-routing software as on lithography. GF's floor-automation and edge-AI investments are the logistics half of that equation.</p>
+            <a class="cta" href="https://www.precedenceresearch.com/amhs-for-semiconductor-market" target="_blank" rel="noopener">See the AMHS market breakdown <span class="arw">→</span></a>
+            <span class="src">REFERENCE · <a href="https://www.precedenceresearch.com/amhs-for-semiconductor-market" target="_blank" rel="noopener">Precedence Research — AMHS for Semiconductor</a></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== SECTION 3 ===== -->
+      <div class="section-head reveal">
+        <span class="num">§03</span>
+        <div><h2>Cleanroom Automation — The Sub-Micron Frontier</h2><p>Direct-drive SCARA · vacuum handling · the ISO Class 1 mandate</p></div>
+        <span class="rule"></span>
+      </div>
+
+      <article class="intel reveal" data-cat="fab">
+        <div class="intel-grid">
+          <div class="channel">
+            <span class="badge">Robotics Trend</span>
+            <span class="sigid">CH·<span>06</span><br>SCARA / DD</span>
+          </div>
+          <div class="content">
+            <h3>Direct-drive SCARA becomes the default wafer mover</h3>
+            <p>The industry is standardizing on direct-drive SCARA arms for wafer handling: no geared transmissions means fewer wear particles, higher stiffness, single-digit-micron repeatability, and faster accel/decel — all of which convert directly into yield and throughput. Paired with vacuum and edge-grip end-effectors and mobile cleanroom cobots, these systems shuttle 300mm (and emerging 450mm) wafers from FOUP to chamber while meeting ISO Class 1–5 contamination limits.</p>
+            <a class="cta" href="https://www.roboticstomorrow.com/news/2025/02/11/wafer-handling-robots-driving-precision-and-efficiency-in-semiconductor-manufacturing/24104" target="_blank" rel="noopener">Read the wafer-handling deep dive <span class="arw">→</span></a>
+            <span class="src">REFERENCES · <a href="https://www.roboticstomorrow.com/news/2025/02/11/wafer-handling-robots-driving-precision-and-efficiency-in-semiconductor-manufacturing/24104" target="_blank" rel="noopener">RoboticsTomorrow</a> · <a href="https://www.hitbotrobot.com/semiconductor-manufacturing/" target="_blank" rel="noopener">Hitbot — direct-drive SCARA</a></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="intel reveal" data-cat="fab">
+        <div class="intel-grid">
+          <div class="channel">
+            <span class="badge">Contamination</span>
+            <span class="sigid">CH·<span>07</span><br>ISO CLASS 1</span>
+          </div>
+          <div class="content">
+            <h3>ISO Class 1 is the engineering constraint that drives everything</h3>
+            <p>At the strict end — ASML's EUV cleanrooms hold ISO Class 1, permitting roughly 10 particles of 0.1 micron per cubic meter — every robot is a potential contamination source. That single constraint is why the floor is going lubricant-free and human-free: direct-drive motion, sealed bearings, and mobile cobots (e.g. KUKA's KMR iiwa class) replace both gear trains and operators. Contamination budget, not reach or payload, is now the primary spec.</p>
+            <a class="cta" href="https://www.kuka.com/en-us/industries/electronics-industry/automation-in-semiconductor-fabrication" target="_blank" rel="noopener">See cleanroom cobot automation <span class="arw">→</span></a>
+            <span class="src">REFERENCES · <a href="https://www.kuka.com/en-us/industries/electronics-industry/automation-in-semiconductor-fabrication" target="_blank" rel="noopener">KUKA</a> · <a href="https://www.cleanroomtechnology.com/news/article_page/Robot_design_for_wafer_handling/55596" target="_blank" rel="noopener">Cleanroom Technology</a></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== TELEMETRY ===== -->
+      <div class="telemetry reveal" id="telemetry">
+        <div class="thead"><h4>Key Indicators</h4><span>Sourced · directional</span></div>
+        <div class="gauges">
+          <div class="gauge">
+            <div class="val" data-target="60" data-decimals="0" data-prefix="$" data-suffix="B">$0<span class="u">B</span></div>
+            <div class="lbl">TI investment across seven U.S. fabs (TX + UT)</div>
+            <div class="track"><div class="fill" data-fill="100"></div></div>
+          </div>
+          <div class="gauge">
+            <div class="val" data-target="20" data-decimals="0" data-prefix="~" data-suffix="%">~0<span class="u">%</span></div>
+            <div class="lbl">Projected Sherman share of world 300mm analog capacity by 2030</div>
+            <div class="track"><div class="fill" data-fill="60"></div></div>
+          </div>
+          <div class="gauge">
+            <div class="val" data-target="8.5" data-decimals="1" data-prefix="" data-suffix="%">0.0<span class="u">%</span></div>
+            <div class="lbl">CAGR of the wafer-handling robot market ($1.3B → $2.7B, ’23–’31)</div>
+            <div class="track"><div class="fill" data-fill="34"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="statusbar">
+      <div>SRC · <b>PUBLIC RELEASES + INDUSTRY PRESS</b></div>
+      <div>VERIFY · <b>LINKS CHECKED</b></div>
+      <div>DIST · <b>INTERNAL ONLY</b></div>
+    </div>
+    <div class="foot-body">
+      <p>© 2026 Silicon &amp; Autonomy Intelligence · Compiled from public press releases and industry reporting.</p>
+      <p class="disclaimer">For internal distribution only. This briefing aggregates publicly available information and third-party market estimates; figures are directional and should be verified against primary filings before use in planning or investment decisions.</p>
+      <a class="ref" href="https://setr.stanford.edu/" target="_blank" rel="noopener">Further reading · Stanford Emerging Technology Review →</a>
+    </div>
+  </footer>
+
+  <p class="signoff">— End of transmission · Next signal in 7 days —</p>
+</div>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- theme toggle ---------- */
+  var tBtn = document.getElementById('themeToggle');
+  var tIcon = document.getElementById('themeIcon');
+  var tText = document.getElementById('themeText');
+  function sysDark(){ return window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  function syncLabel(){
+    var dark = (root.getAttribute('data-theme') || (sysDark()?'dark':'light')) === 'dark';
+    tIcon.textContent = dark ? '◑' : '◐';
+    tText.textContent = dark ? 'Dark' : 'Light';
+  }
+  tBtn.addEventListener('click', function(){
+    var cur = root.getAttribute('data-theme') || (sysDark()?'dark':'light');
+    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+    syncLabel();
+  });
+  syncLabel();
+
+  /* ---------- reading progress ---------- */
+  var bar = document.getElementById('progress');
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---------- scroll reveal ---------- */
+  var reveals = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    reveals.forEach(function(el){ ro.observe(el); });
+  }
+
+  /* ---------- telemetry count-up ---------- */
+  function runGauges(container){
+    container.querySelectorAll('.val').forEach(function(el){
+      var target = parseFloat(el.dataset.target);
+      var dec = parseInt(el.dataset.decimals, 10) || 0;
+      var pre = el.dataset.prefix || '';
+      var suf = el.dataset.suffix || '';
+      if (reduce){ el.innerHTML = pre + target.toFixed(dec) + '<span class="u">' + suf + '</span>'; return; }
+      var start = null, dur = 1200;
+      function step(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var cur = (target * eased).toFixed(dec);
+        el.innerHTML = pre + cur + '<span class="u">' + suf + '</span>';
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+    container.querySelectorAll('.fill').forEach(function(f){ f.style.width = (f.dataset.fill || 0) + '%'; });
+  }
+  var tel = document.getElementById('telemetry');
+  if (reduce || !('IntersectionObserver' in window)){ runGauges(tel); }
+  else {
+    var to = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ runGauges(tel); to.disconnect(); } });
+    }, {threshold:0.4});
+    to.observe(tel);
+  }
+
+  /* ---------- filter ---------- */
+  var chips = document.querySelectorAll('.chip');
+  var cards = document.querySelectorAll('.intel');
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chips.forEach(function(c){ c.setAttribute('aria-pressed','false'); });
+      chip.setAttribute('aria-pressed','true');
+      var f = chip.dataset.filter;
+      cards.forEach(function(card){
+        var match = (f === 'all' || card.dataset.cat === f);
+        if (match){
+          card.style.display = '';
+          requestAnimationFrame(function(){ card.classList.remove('is-hidden'); });
+        } else {
+          card.classList.add('is-hidden');
+          setTimeout(function(){ if(card.classList.contains('is-hidden')) card.style.display='none'; }, 320);
+        }
+      });
+    });
+  });
+
+  /* ---------- header oscilloscope ---------- */
+  var cv = document.getElementById('scope');
+  if (cv){
+    var ctx = cv.getContext('2d');
+    var W, H, dpr, t = 0, raf;
+    function accent(){ return getComputedStyle(root).getPropertyValue('--signal').trim() || '#2fe6cf'; }
+    function resize(){
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var r = cv.getBoundingClientRect();
+      W = r.width; H = r.height;
+      cv.width = W * dpr; cv.height = H * dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    function frame(){
+      ctx.clearRect(0,0,W,H);
+      var col = accent();
+      /* faint grid */
+      ctx.globalAlpha = 0.10; ctx.strokeStyle = col; ctx.lineWidth = 1;
+      for (var x = 0; x <= W; x += 34){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+      /* signal trace */
+      ctx.globalAlpha = 0.9; ctx.lineWidth = 1.6; ctx.beginPath();
+      for (var i = 0; i <= W; i += 2){
+        var y = H/2
+          + Math.sin((i*0.018) + t) * (H*0.16)
+          + Math.sin((i*0.052) + t*1.7) * (H*0.06)
+          + Math.sin((i*0.11) + t*0.6) * (H*0.03);
+        i === 0 ? ctx.moveTo(i,y) : ctx.lineTo(i,y);
+      }
+      var grad = ctx.createLinearGradient(0,0,W,0);
+      grad.addColorStop(0,'transparent'); grad.addColorStop(0.5,col); grad.addColorStop(1,'transparent');
+      ctx.strokeStyle = grad; ctx.shadowColor = col; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
+      t += 0.03;
+      raf = requestAnimationFrame(frame);
+    }
+    function staticFrame(){
+      ctx.clearRect(0,0,W,H); var col = accent();
+      ctx.globalAlpha = 0.10; ctx.strokeStyle = col; ctx.lineWidth = 1;
+      for (var x = 0; x <= W; x += 34){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+      ctx.globalAlpha = 0.7; ctx.lineWidth = 1.6; ctx.beginPath();
+      for (var i = 0; i <= W; i += 2){ var y = H/2 + Math.sin(i*0.018)*(H*0.16); i===0?ctx.moveTo(i,y):ctx.lineTo(i,y); }
+      ctx.strokeStyle = col; ctx.stroke();
+    }
+    resize();
+    window.addEventListener('resize', function(){ resize(); if(reduce) staticFrame(); });
+    if (reduce){ staticFrame(); } else { frame(); }
+    /* pause when tab hidden */
+    document.addEventListener('visibilitychange', function(){
+      if (reduce) return;
+      if (document.hidden){ cancelAnimationFrame(raf); } else { frame(); }
+    });
+  }
+})();
+</script>
