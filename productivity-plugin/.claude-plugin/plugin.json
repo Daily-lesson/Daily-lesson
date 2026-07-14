@@ -1,7 +1,7 @@
 {
   "name": "productivity",
   "version": "1.0.0",
-  "description": "Personal productivity plugin for Daily-lesson: cross-project standup, daily planning + inbox, dev-workflow shortcuts tuned to each repo's CLAUDE.md, billing/ops snapshots, and growth/marketing commands.",
+  "description": "Personal productivity plugin for Daily-lesson: cross-project standup, daily planning + inbox, dev-workflow shortcuts tuned to each repo's CLAUDE.md, billing/ops snapshots, growth/marketing commands, and source-verified content generation.",
   "author": {
     "name": "Daily-lesson",
     "email": "scoty65@gmail.com"
@@ -14,6 +14,8 @@
     "inbox",
     "billing",
     "growth",
+    "newsletter",
+    "content",
     "supabase",
     "nextjs",
     "sentry"
