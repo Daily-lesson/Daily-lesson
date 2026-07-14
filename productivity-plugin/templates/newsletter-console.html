@@ -3,11 +3,20 @@
   FAB SIGNAL CONSOLE — canonical skeleton for the /newsletter command.
   This is the default template every weekly issue is built from. Keep the
   design system (tokens, layout, interactions) intact; swap only the CONTENT
-  slots: masthead/subtitle, meta bar, the <article class="intel"> cards
-  (with data-cat = fab | edge | market | field | iiot), the filter chips +
-  their counts, the telemetry gauges, and the footer. Every link must be
-  real and verified per the command's rules. The sample content below is the
-  last built issue (No. 29) — replace it, don't ship it verbatim.
+  slots: masthead/subtitle, meta bar, the <article class="intel"> cards, the
+  section-nav chips + counts, the telemetry gauges, and the footer.
+
+  CONVENTIONS (enforced by the command):
+   • ONE tile per section by default. data-cat ∈
+     field | logi | edge | iiot | fab | market. Nav chips + counts = the
+     sections that shipped.
+   • RECENCY GATE: every story's primary publication date must be within the
+     last 14 days. Put the date in each tile's channel strip (.sigid), the
+     WINDOW (start–today) in the meta bar, and "WINDOW · PAST 14 DAYS" in the
+     footer status bar. A section with nothing in-window ships as one honest
+     QUIET tile — never backfilled with older material.
+   • Every link real and verified. The sample content below is illustrative
+     (a past issue) — replace it, don't ship it verbatim.
   ============================================================================
 -->
 <title>Silicon &amp; Autonomy Intelligence — Fab Signal Console</title>
@@ -319,7 +328,7 @@
     <div class="metabar">
       <div><span class="k">Issue</span><span class="v">No. 29 · Vol. 1</span></div>
       <div><span class="k">Transmission</span><span class="v">July 14, 2026</span></div>
-      <div><span class="k">Channels</span><span class="v">07 active</span></div>
+      <div><span class="k">Window</span><span class="v">Jun 29 – Jul 13</span></div>
       <div><span class="k">Classification</span><span class="v live">Internal</span></div>
     </div>
   </div>
@@ -503,8 +512,8 @@
   <!-- ================= FOOTER ================= -->
   <footer class="footer">
     <div class="statusbar">
-      <div>SRC · <b>PUBLIC RELEASES + INDUSTRY PRESS</b></div>
-      <div>VERIFY · <b>LINKS CHECKED</b></div>
+      <div>WINDOW · <b>PAST 14 DAYS</b></div>
+      <div>VERIFY · <b>DATED + SOURCED</b></div>
       <div>DIST · <b>INTERNAL ONLY</b></div>
     </div>
     <div class="foot-body">
