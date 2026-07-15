@@ -1,0 +1,51 @@
+name: CI
+
+# This repo ships a Claude Code plugin (productivity-plugin). The checks that
+# matter are that the plugin manifests and hook configs are valid JSON and any
+# bundled scripts are syntactically valid.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate plugin
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate JSON (plugin + hooks manifests)
+        run: |
+          set -euo pipefail
+          mapfile -d '' files < <(find . -name '*.json' -not -path './node_modules/*' -print0)
+          for f in "${files[@]}"; do
+            echo "validate $f"
+            node -e "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))" "$f"
+          done
+
+      - name: Check script syntax (.mjs / .js)
+        run: |
+          set -euo pipefail
+          mapfile -d '' files < <(find . \( -name '*.mjs' -o -name '*.js' \) -not -path './node_modules/*' -print0)
+          if [ ${#files[@]} -eq 0 ]; then echo "No scripts found."; exit 0; fi
+          for f in "${files[@]}"; do
+            echo "check $f"
+            node --check "$f"
+          done
