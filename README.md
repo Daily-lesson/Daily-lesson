@@ -1,28 +1,17 @@
-# 👋 Daily-lesson
+# 👋 Hey there
 
-Robotics engineer by trade — I work on autonomous systems (Boston Dynamics Spot,
-BVLOS drones) and the IoT around them across a large manufacturing network.
+Robotics and automation by trade. I work where hardware, software and
+operations meet, and I'm happiest when something works in the field and
+not just in a demo.
 
-The projects below are mine in the sense that I design and direct them, but I
-don't hand-write the code — I use Claude to build them. I bring the domain
-knowledge and product direction; the AI does the implementation. They're
-experiments and works in progress, not polished products.
+This account is my workshop. I use it to learn, try ideas, and build small
+tools with AI as my pair programmer. I bring the problem and the direction,
+and the AI does most of the typing. Most of it is experimental and some of
+it is private. None of it is a finished product.
 
-### Projects
+**What I'm into right now**
+- Autonomy and robotics operations
+- Data, IoT and the plumbing that holds systems together
+- Using AI to get one person's ideas built faster
 
-- **PRISM** — a robotics fleet-operations dashboard, close to the fleet-ops work I
-  do day to day.
-- **ResumAI** — AI-assisted resume tailoring and job search.
-- **Off_Races** — a phone-first horse-race handicapping PWA with a transparent,
-  offline scoring engine.
-- **SocialOS** — a personal social-media manager PWA.
-
-### What these are built with
-
-Next.js · React · TypeScript · Supabase / Postgres · Python — assembled mostly
-with AI coding tools.
-
-<!---
-Daily-lesson/Daily-lesson is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+Always happy to swap notes. Thanks for stopping by!
